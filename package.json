@@ -1,0 +1,37 @@
+{
+  "dependencies": {
+    "@tanstack/react-query": "^5.45.1",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.2.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.3.2",
+    "next": "^14.2.4",
+    "nodemon": "^3.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "name": "twitter-clone",
+  "version": "1.0.0",
+  "main": "app.cjs",
+  "scripts": {
+    "dev": "nodemon Server/app.cjs",
+    "start": "nodemon  Server/app.cjs",
+    "build": "next build"
+  },
+  "engines": {
+    "node": "18.12.1"  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "directories": {
+    "lib": "lib"
+  },
+  "description": ""
+}
