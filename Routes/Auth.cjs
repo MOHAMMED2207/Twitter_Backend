@@ -3,7 +3,7 @@ const AuthControllr = require("../Controllers/AuthControllr.cjs");
 const AUTH_MIDDLEWARES = require("../middlewares/authentication.cjs"); // Routes
 const router = Express.Router(); // Routes
 
-router.get("/auth/register", AuthControllr.GetAllUser); //f
+router.get("/auth/register", AuthControllr.GetAllUser); //
 // ...........................................................................................................
 router.get(
   "/auth/register/:id",
