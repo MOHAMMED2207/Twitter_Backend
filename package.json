@@ -1,10 +1,10 @@
 {
   "name": "twitter-clone",
   "version": "1.0.0",
-  "main": "app.cjs",
+  "main": "api/index.cjs",
   "scripts": {
-    "dev": "nodemon app.cjs",
-    "start": "node app.cjs"
+    "dev": "nodemon api/index.cjs",
+    "start": "node api/index.cjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.45.1",

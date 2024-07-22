@@ -19,13 +19,13 @@ cloudinary.config({
   api_key: process.env.Cloudinary_API_KEY,
   api_secret: process.env.Cloudinary_API_SECRET,
 });
+
 // تهيئة Express
 const app = express();
-// المكونات الوسطى (middlewares)
 
+// المكونات الوسطى (middlewares)
 // تحديد حد الحجم إلى 1GB
 app.use(bodyParser.json({ limit: "1gb" }));
-
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -72,3 +72,5 @@ const PORT = process.env.PORT || 5005;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = app;
