@@ -135,7 +135,6 @@ exports.login = async function (req, res) {
     res.cookie("jwt", Token, {
       maxAge: 15 * 24 * 60 * 60 * 1000, //MS
       httpOnly: false, // prevent XSS attacks cross-site scripting attacks
-          sameSite: "strict", // CSRF attacks cross-site request forgery attacks
     });
 
 
