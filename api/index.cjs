@@ -30,12 +30,33 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://twitter-ui-lemon.vercel.ap",
+];
+
 const corsOptions = {
-  origin:   "https://twitter-ui-lemon.vercel.app","http://localhost:3000"
-  credentials: true
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
+
+
+
+
+
+
+
+
+
+
 // إعداد المسارات (routes)
 app.use("/api", AuthRouter); // Auth
 app.use("/api", UserRouter); // User
