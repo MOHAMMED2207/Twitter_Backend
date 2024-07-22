@@ -31,7 +31,7 @@ app.use(cookieParser());
 
 
 const corsOptions = {
-  origin:   "https://twitter-ui-lemon.vercel.app",
+  origin:   "https://twitter-ui-lemon.vercel.app","http://localhost:3000"
   credentials: true
 };
 
