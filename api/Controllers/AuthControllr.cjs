@@ -132,12 +132,14 @@ exports.login = async function (req, res) {
       token: Token,
     };
 
-    res.cookie("jwt", Token, {
-      maxAge: 15 * 24 * 60 * 60 * 1000, //MS
-      httpOnly: false, // prevent XSS attacks cross-site scripting attacks
-  sameSite: "strict", // منع CSRF
-    });
- 
+res.cookie("jwt", Token, {
+  maxAge: 15 * 24 * 60 * 60 * 1000, // 15 يومًا بالمللي ثانية
+  httpOnly: true, // يحمي من هجمات XSS
+  sameSite: "strict", // يحمي من هجمات CSRF
+  secure: true, // يضمن أن الكوكيز تُرسل عبر HTTPS فقط
+  domain: ".vercel.app" // يسمح بالوصول إلى الكوكيز من جميع النطاقات الفرعية لـ "vercel.app"
+});
+  
 
 
 
