@@ -134,7 +134,7 @@ exports.login = async function (req, res) {
 
 res.cookie('jwt', Token, {
   maxAge: 15 * 24 * 60 * 60 * 1000, // 15 يومًا بالمللي ثانية
-  httpOnly: true, // يمنع الوصول إلى الكوكيز عبر JavaScript في العميل
+  httpOnly: false, // يمنع الوصول إلى الكوكيز عبر JavaScript في العميل
   sameSite: 'none', // تأكد من تعيينه إلى 'none' عند استخدام CORS
   secure: true', // تأكد من استخدام HTTPS في الإنتاج
   domain: '.vercel.app'  // تعيين النطاق فقط في الإنتاج
