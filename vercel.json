@@ -1,15 +1,16 @@
+
 {
   "version": 2,
   "builds": [
     {
-      "src": "./api/index.cjs",
+      "src": "/api/index.cjs",
       "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "./api/index.cjs"
+      "source": "/(.*)",
+      "destination": "/api/index.cjs"
     }
   ]
 }
