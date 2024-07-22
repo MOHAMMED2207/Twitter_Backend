@@ -135,7 +135,6 @@ exports.login = async function (req, res) {
 res.cookie("jwt", Token, {
   maxAge: 15 * 24 * 60 * 60 * 1000, // 15 يومًا بالمللي ثانية
   httpOnly: false, // يحمي من هجمات XSS
-  sameSite: "strict", // يحمي من هجمات CSRF
   domain: ".vercel.app" // يسمح بالوصول إلى الكوكيز من جميع النطاقات الفرعية لـ "vercel.app"
 });
   
