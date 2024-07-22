@@ -29,23 +29,13 @@ app.use(bodyParser.json({ limit: "1gb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-const allowedOrigins = [
-  "http://localhost:3000",
-];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
+  origin:   "http://localhost:3000",
+  credentials: true
 };
 
 app.use(cors(corsOptions));
-
 // إعداد المسارات (routes)
 app.use("/api", AuthRouter); // Auth
 app.use("/api", UserRouter); // User
