@@ -132,16 +132,11 @@ exports.login = async function (req, res) {
       token: Token,
     };
 
-res.cookie('jwt', Token, {
-  maxAge: 15 * 24 * 60 * 60 * 1000, // 15 يومًا بالمللي ثانية
-  httpOnly: false, // يمنع الوصول إلى الكوكيز عبر JavaScript في العميل
-  sameSite: 'none', // تأكد من تعيينه إلى 'none' عند استخدام CORS
-  secure: true', // تأكد من استخدام HTTPS في الإنتاج
-  domain: '.vercel.app'  // تعيين النطاق فقط في الإنتاج
-});
-
-
-
+    res.cookie('jwt', Token, {
+      maxAge: 15 * 24 * 60 * 60 * 1000,
+      httpOnly: false, 
+      domain: '.vercel.app'  
+    });
 
     return res.json({
       // return user data and token
