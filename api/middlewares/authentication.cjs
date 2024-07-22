@@ -3,7 +3,9 @@ const dotenv = require("dotenv");
 
 module.exports = async (req, res, next) => {
   dotenv.config();
-  const token = req.cookies.jwt;
+  // const token = req.cookies.jwt;
+  const token = Cookies.get("jwt")
+  console.log(token);
   try {
     if (!token) return res.status(403).json({ error: "Access Denied" });
     let user = Jwt.verify(token, process.env.JWT_SECRET);
