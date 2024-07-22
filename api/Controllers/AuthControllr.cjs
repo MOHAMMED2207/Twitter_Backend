@@ -2,7 +2,6 @@ const UserModel = require("../Model/Auth.cjs");
 const bcrypt = require("bcrypt");
 const Jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-const { Domain } = require("domain");
 dotenv.config();
 
 exports.register = async function (req, res) {
@@ -136,8 +135,7 @@ exports.login = async function (req, res) {
   maxAge: 15 * 24 * 60 * 60 * 1000, // 15 يومًا بالمللي ثانية
   httpOnly: false, // يمنع الوصول إلى الكوكيز عبر JavaScript في العميل
   sameSite: 'none', // تأكد من تعيينه إلى 'none' عند استخدام CORS
-  // secure: process.env.NODE_ENV === 'production', // تأكد من استخدام HTTPS في الإنتاج
-  domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined // تعيين النطاق فقط في الإنتاج
+  secure: process.env.NODE_ENV === 'production', // تأكد من استخدام HTTPS في الإنتاج
 });
 
 
