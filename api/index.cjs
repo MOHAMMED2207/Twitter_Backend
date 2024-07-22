@@ -31,7 +31,6 @@ app.use(cookieParser());
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://twitter-full-app-mernnfinal.vercel.app",
 ];
 
 const corsOptions = {
