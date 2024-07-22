@@ -135,7 +135,8 @@ exports.login = async function (req, res) {
   maxAge: 15 * 24 * 60 * 60 * 1000, // 15 يومًا بالمللي ثانية
   httpOnly: false, // يمنع الوصول إلى الكوكيز عبر JavaScript في العميل
   sameSite: 'none', // تأكد من تعيينه إلى 'none' عند استخدام CORS
-  secure: process.env.NODE_ENV === 'production', // تأكد من استخدام HTTPS في الإنتاج
+  secure: false
+    // process.env.NODE_ENV === 'production', // تأكد من استخدام HTTPS في الإنتاج
 });
 
 
