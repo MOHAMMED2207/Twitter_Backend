@@ -131,7 +131,7 @@ exports.login = async function (req, res) {
       token: Token,
     };
 
-res.cookie('jwt', token, {
+res.cookie('jwt', Token, {
   maxAge: 15 * 24 * 60 * 60 * 1000, // 15 يومًا بالمللي ثانية
   httpOnly: true, // يحمي الكوكيز من الوصول عبر JavaScript
   sameSite: 'None', // يتيح استخدام الكوكيز عبر النطاقات المختلفة
