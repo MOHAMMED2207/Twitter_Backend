@@ -18,4 +18,6 @@ router.post("/auth/logout", AuthControllr.logout); //
 // ...........................................................................................................
 router.get("/auth/me", AUTH_MIDDLEWARES , AuthControllr.getmee); //
 // ...........................................................................................................
+router.get("/checkAuth" ,AUTH_MIDDLEWARES, AuthControllr.checkAuth); //
+
 module.exports = router; //  Exports
