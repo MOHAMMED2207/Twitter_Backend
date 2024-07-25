@@ -131,21 +131,14 @@ exports.login = async function (req, res) {
       token: Token,
     };
 
-res.cookie('jwt', Token, {
-  maxAge: 15 * 24 * 60 * 60 * 1000, // 15 يومًا بالمللي ثانية
-  httpOnly: true, // يحمي الكوكيز من الوصول عبر JavaScript
-  sameSite: 'None', // يتيح استخدام الكوكيز عبر النطاقات المختلفة
-  secure: true // يضمن إرسال الكوكيز عبر HTTPS فقط
-});
-
-
-
 
     return res.json({
       // return user data and token
       Message: "User Login Succesfully", // msg
       status: 200, // status(200) is a ok , send msg
       user: UserRegister, // user data
+      token: Token // إرسال التوكن كجزء من الاستجابة
+
     });
   } catch (err) {
     console.log(err); // log error
@@ -155,14 +148,6 @@ res.cookie('jwt', Token, {
 
 exports.logout = async (req, res) => {
   try {
-    // res.cookie("jwt", "", { maxAge: 0 });
-     // مسح كوكيز jwt
-    res.clearCookie("jwt", {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true
-    });
-
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
@@ -214,21 +199,3 @@ exports.getmee = async function (req, res) {
   }
 };
 // --------------------------------------------------------------------------------------------------------
-// التحقق من صحة الـ token
-exports.checkAuth = async function (req, res) {
-  try {
-    const token = req.cookies.jwt
-    if (!token) {
-      return res.status(401).json({ message: "Not found authenticated " });
-    }
-    Jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ message: "Not authenticated verify" });
-      }
-      res.status(200).json({ message: "Authenticated success" });
-    });
-  } catch (error) {
-    console.log("Error in checkAuth controller", error.message);
-    res.status(401).json({ error: " checkAuth  Not authenticated" });
-  }
-};
