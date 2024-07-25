@@ -214,3 +214,21 @@ exports.getmee = async function (req, res) {
   }
 };
 // --------------------------------------------------------------------------------------------------------
+// التحقق من صحة الـ token
+exports.checkAuth = async function (req, res) {
+  try {
+    const token = req.cookies.jwt
+    if (!token) {
+      return res.status(401).json({ message: "Not found authenticated " });
+    }
+    Jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ message: "Not authenticated verify" });
+      }
+      res.status(200).json({ message: "Authenticated success" });
+    });
+  } catch (error) {
+    console.log("Error in checkAuth controller", error.message);
+    res.status(401).json({ error: " checkAuth  Not authenticated" });
+  }
+};
