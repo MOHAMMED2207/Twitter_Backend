@@ -74,6 +74,11 @@ exports.deletePost = async (req, res) => {
       await cloudinary.uploader.destroy(imgId);
     }
 
+    if (post.video) {
+      const videoId = post.video.split("/").pop().split(".")[0];
+      await cloudinary.uploader.destroy(videoId);
+    }
+
     await PostModel.findByIdAndDelete(req.params.id);
 
     res.status(200).json({ message: "Post deleted successfully" });
@@ -229,41 +234,11 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
-// exports.getAllPosts = async (req, res) => {
-//   const page = parseInt(req.query.page) || 1; // استخراج رقم الصفحة من الطلب إذا كان متاحًا، وإلا استخدام الصفحة الأولى كالافتراضي
-//   const limit = 3; // عدد المنشورات التي تريد استرجاعها في كل طلب
-
-//   try {
-//     const posts = await PostModel.find()
-//       .sort({ createdAt: -1 })
-//       .skip((page - 1) * limit) // تخطي عدد المنشورات التي تم عرضها بالفعل
-//       .limit(limit) // حدد عدد المنشورات التي تريد استرجاعها
-//       .populate({
-//         path: "user",
-//         select: "-email -password", // استبعاد حقول البريد الإلكتروني وكلمة المرور من النتيجة
-//       })
-//       .populate({
-//         path: "comments.user",
-//         select: "-email -password", // استبعاد حقول البريد الإلكتروني وكلمة المرور من النتيجة
-//       });
-
-//     // تحقق مما إذا كان هناك منشورات لاسترجاعها
-//     if (posts.length === 0) {
-//       return res.status(200).json([]);
-//     }
-
-//     res.status(200).json(posts); // إرجاع المنشورات كاستجابة ناجحة
-//   } catch (error) {
-//     console.log("Error in getAllPosts controller: ", error);
-//     res.status(500).json({ error: "Internal server error" }); // إرجاع رسالة خطأ في حالة حدوث خطأ داخلي
-//   }
-// };
-
 exports.getLikedPosts = async (req, res) => {
-  const userId = req.user._id;
+  const username = req.params.username
 
   try {
-    let user = await UserModel.findById(userId);
+    let user = await UserModel.findOne({ username })
     if (!user) return res.status(404).json({ error: "User not found" });
     const likedPosts = await PostModel.find({ _id: { $in: user.likedPosts } })
       .populate({
@@ -300,7 +275,6 @@ exports.getFollowingPosts = async (req, res) => {
         path: "comments.user",
         select: "-password",
       });
-
     res.status(200).json(feedPosts);
   } catch (error) {
     console.log("Error in getFollowingPosts controller: ", error);
@@ -325,7 +299,6 @@ exports.getUserPosts = async (req, res) => {
         path: "comments.user",
         select: "-password",
       });
-
     res.status(200).json(posts);
   } catch (error) {
     console.log("Error in getUserPosts controller: ", error);
