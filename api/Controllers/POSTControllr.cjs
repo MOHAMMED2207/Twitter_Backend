@@ -210,9 +210,16 @@ exports.likeUnlikePost = async (req, res) => {
 };
 
 exports.getAllPosts = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20;
+  const skip = (page - 1) * limit;
   try {
+    const totalPosts = await PostModel.countDocuments(); // Get total number of posts
+
     const posts = await PostModel.find()
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate({
         path: "user",
         select: " -email -Password",
@@ -221,13 +228,8 @@ exports.getAllPosts = async (req, res) => {
         path: "comments.user",
         select: " -email -Password",
       });
-    // descending order (A.B., from newest to oldest). The '-1' indicates descending order
 
-    if (posts.length === 0) {
-      return res.status(200).json([]);
-    }
-
-    res.status(200).json(posts);
+    res.status(200).json({ posts, totalPosts });
   } catch (error) {
     console.log("Error in getAllPosts controller: ", error);
     res.status(500).json({ error: "Internal server error" });
@@ -235,12 +237,20 @@ exports.getAllPosts = async (req, res) => {
 };
 
 exports.getLikedPosts = async (req, res) => {
-  const username = req.params.username
+  const username = req.params.username;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20;
+  const skip = (page - 1) * limit;
 
   try {
-    let user = await UserModel.findOne({ username })
+    let user = await UserModel.findOne({ username });
     if (!user) return res.status(404).json({ error: "User not found" });
-    const likedPosts = await PostModel.find({ _id: { $in: user.likedPosts } })
+
+    const totalPosts = user.likedPosts.length; // Get total number of liked posts
+    console.log(totalPosts);
+    const posts = await PostModel.find({ _id: { $in: user.likedPosts } })
+      .skip(skip)
+      .limit(limit)
       .populate({
         path: "user",
         select: "-Password",
@@ -249,8 +259,8 @@ exports.getLikedPosts = async (req, res) => {
         path: "comments.user",
         select: "-Password",
       });
-    console.log(likedPosts);
-    res.status(200).json(likedPosts);
+
+    res.status(200).json({ posts, totalPosts });
   } catch (error) {
     console.log("Error in getLikedPosts controller: ", error);
     res.status(500).json({ error: "Internal server error" });
@@ -258,6 +268,10 @@ exports.getLikedPosts = async (req, res) => {
 };
 
 exports.getFollowingPosts = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20;
+  const skip = (page - 1) * limit;
+
   try {
     const userId = req.user._id;
     const user = await UserModel.findById(userId);
@@ -265,8 +279,14 @@ exports.getFollowingPosts = async (req, res) => {
 
     const following = user.following;
 
-    const feedPosts = await PostModel.find({ user: { $in: following } })
+    const totalPosts = await PostModel.countDocuments({
+      user: { $in: following },
+    }); // Get total number of following posts
+
+    const posts = await PostModel.find({ user: { $in: following } })
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate({
         path: "user",
         select: "-password",
@@ -275,7 +295,8 @@ exports.getFollowingPosts = async (req, res) => {
         path: "comments.user",
         select: "-password",
       });
-    res.status(200).json(feedPosts);
+
+    res.status(200).json({ posts, totalPosts });
   } catch (error) {
     console.log("Error in getFollowingPosts controller: ", error);
     res.status(500).json({ error: "Internal server error" });
@@ -283,14 +304,22 @@ exports.getFollowingPosts = async (req, res) => {
 };
 
 exports.getUserPosts = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20;
+  const skip = (page - 1) * limit;
+
   try {
     const { username } = req.params;
 
     const user = await UserModel.findOne({ username });
     if (!user) return res.status(404).json({ error: "User not found" });
 
+    const totalPosts = await PostModel.countDocuments({ user: user._id }); // Get total number of user posts
+
     const posts = await PostModel.find({ user: user._id })
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate({
         path: "user",
         select: "-password",
@@ -299,7 +328,8 @@ exports.getUserPosts = async (req, res) => {
         path: "comments.user",
         select: "-password",
       });
-    res.status(200).json(posts);
+
+    res.status(200).json({ posts, totalPosts });
   } catch (error) {
     console.log("Error in getUserPosts controller: ", error);
     res.status(500).json({ error: "Internal server error" });
