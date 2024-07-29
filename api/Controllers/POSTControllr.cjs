@@ -211,7 +211,7 @@ exports.likeUnlikePost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 20;
+  const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
   try {
     const totalPosts = await PostModel.countDocuments(); // Get total number of posts
@@ -239,7 +239,7 @@ exports.getAllPosts = async (req, res) => {
 exports.getLikedPosts = async (req, res) => {
   const username = req.params.username;
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 20;
+  const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
 
   try {
@@ -269,7 +269,7 @@ exports.getLikedPosts = async (req, res) => {
 
 exports.getFollowingPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 20;
+  const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
 
   try {
@@ -305,7 +305,7 @@ exports.getFollowingPosts = async (req, res) => {
 
 exports.getUserPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 20;
+  const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
 
   try {
