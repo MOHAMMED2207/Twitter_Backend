@@ -29,10 +29,10 @@ app.use(bodyParser.json({ limit: "1gb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://twitter-ui-lemon.vercel.app",
+  "http://localhost:3001",
+  "https://twitter-full-app-mernnfinal.vercel.app",
 ];
 
 const corsOptions = {
@@ -47,15 +47,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-
-
-
-
-
-
-
-
 
 // إعداد المسارات (routes)
 app.use("/api", AuthRouter); // Auth
