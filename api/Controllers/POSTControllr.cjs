@@ -335,3 +335,26 @@ exports.getUserPosts = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+exports.getPostById = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const post = await PostModel.findById(postId)
+      .populate({
+        path: "user",
+        select: "-password -email",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password -email",
+      });
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    res.status(200).json(post);
+  } catch (error) {
+    console.log("Error in getPostById controller: ", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
