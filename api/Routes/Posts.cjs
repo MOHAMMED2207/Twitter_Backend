@@ -24,5 +24,6 @@ router.get(
   AUTH_MIDDLEWARES,
   POSTControllr.getUserPosts
 );
+router.get("/posts/:id", POSTControllr.getPostById);
 
 module.exports = router; //  Exports
