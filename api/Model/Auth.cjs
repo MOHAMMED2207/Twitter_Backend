@@ -36,6 +36,13 @@ const userScheam = new Schema(
         default: [],
       },
     ],
+    savedPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        default: [],
+      },
+    ],
     ProfileImg: String, // this is the profile image of the user
     CoverImg: String, // this is the cover image of the user
     bio: String,
