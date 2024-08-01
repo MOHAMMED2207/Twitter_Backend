@@ -358,3 +358,53 @@ exports.getPostById = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.savePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const userId = req.user._id;
+
+    const post = await PostModel.findById(postId);
+    const user = await UserModel.findById(userId);
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // التحقق مما إذا كان المستخدم قد حفظ المنشور بالفعل
+    const userHasSavedPost = user.savedPosts.includes(postId);
+
+    if (userHasSavedPost) {
+      // إزالة معرف المنشور من قائمة المحفوظات لدى المستخدم
+      user.savedPosts = user.savedPosts.filter(
+        (id) => id.toString() !== postId.toString()
+      );
+      await user.save();
+
+      // إزالة معرف المستخدم من قائمة المحفوظات في المنشور
+      post.savedBy = post.savedBy.filter(
+        (id) => id.toString() !== userId.toString()
+      );
+      await post.save();
+
+      return res.status(200).json({ message: "Post unsaved successfully" });
+    }
+
+    // إذا لم يكن المستخدم قد حفظ المنشور، أضف معرف المنشور إلى قائمة المحفوظات
+    user.savedPosts.push(postId);
+    await user.save();
+
+    // إضافة معرف المستخدم إلى قائمة المحفوظات في المنشور
+    post.savedBy.push(userId);
+    await post.save();
+
+    res.status(200).json({ message: "Post saved successfully" });
+  } catch (error) {
+    console.error("Error saving post:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
