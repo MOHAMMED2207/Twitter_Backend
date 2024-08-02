@@ -9,6 +9,7 @@ router.delete("/post/delete/:id", AUTH_MIDDLEWARES, POSTControllr.deletePost);
 router.post("/post/comment/:id", AUTH_MIDDLEWARES, POSTControllr.commentOnPost);
 router.post("/post/like/:id", AUTH_MIDDLEWARES, POSTControllr.likeUnlikePost);
 router.get("/post/all", AUTH_MIDDLEWARES, POSTControllr.getAllPosts);
+router.get("/post/Save/:username", AUTH_MIDDLEWARES, POSTControllr.getSavePost);
 router.post("/post/Save/:id", AUTH_MIDDLEWARES, POSTControllr.savePost);
 router.get(
   "/post/likes/:username",
