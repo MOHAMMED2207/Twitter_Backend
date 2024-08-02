@@ -408,3 +408,35 @@ exports.savePost = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.getSavePost = async (req, res) => {
+  const username = req.params.username;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  try {
+    let user = await UserModel.findOne({ username });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const totalPosts = await PostModel.countDocuments({ savedBy: user._id });
+
+    const posts = await PostModel.find({ savedBy: user._id })
+      .skip(skip)
+      .limit(limit)
+      .populate({
+        path: "user",
+        select: "-Password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-Password",
+      });
+
+    console.log(posts);
+    res.status(200).json({ posts, totalPosts });
+  } catch (error) {
+    console.log("Error in getLikedPosts controller: ", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
